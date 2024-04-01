@@ -1,6 +1,7 @@
 import { ServiceFactory } from "@/lib/service.factory";
 import { AttachmentService, CourseService } from "@/services/courses";
 import { auth } from "@clerk/nextjs";
+
 import { NextResponse } from "next/server";
 
 export async function POST(

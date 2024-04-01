@@ -10,7 +10,7 @@ import { CourseService } from "@/services/courses";
 
 const CoursesPage = async () => {
   const { userId } = auth();
-
+  console.log(userId);
   if (!userId) {
     return redirect("/");
   }

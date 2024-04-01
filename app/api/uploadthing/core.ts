@@ -15,7 +15,7 @@ export const ourFileRouter = {
     .onUploadComplete(() => {
       console.log("Upload Image complete");
     }),
-  courseAttachment: f(["text", "image", "video", "audio", "pdf"])
+  courseAttachment: f({ pdf: { maxFileSize: "16MB", maxFileCount: 1 } } || { text: { maxFileSize: "8MB", maxFileCount: 1 } })
     .middleware(() => handleAuth())
     .onUploadComplete(() => {
       console.log("Upload Attachement complete");

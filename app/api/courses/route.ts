@@ -1,9 +1,7 @@
-import { db } from "@/lib/db";
 import { ServiceFactory } from "@/lib/service.factory";
 import { CourseService } from "@/services/courses";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-import { create } from 'zustand';
 
 export async function POST(req: Request) {
   try {

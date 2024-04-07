@@ -1,15 +1,16 @@
 import { UpdateCourseDto } from "@/lib/dtos/courses";
 import { ServiceFactory } from "@/lib/service.factory";
 import { ChapterService, CourseService, MuxService } from "@/services/courses";
-import { auth } from "@clerk/nextjs";
+// import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import Mux from "@mux/mux-node";
+import { auth } from "@/actions/auth";
 
 const mux = new Mux();
 
 export async function DELETE(req: Request, { params }: { params: { courseId: string } }) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     if (!userId) {
       return new NextResponse("No autorizado", { status: 401 });
     }
@@ -38,7 +39,7 @@ export async function DELETE(req: Request, { params }: { params: { courseId: str
 
 export async function PATCH(req: Request, { params }: { params: { courseId: string } }) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     const courseId = params.courseId;
     if (!userId) {
       return new NextResponse("Usuario no autorizado.", { status: 401 });

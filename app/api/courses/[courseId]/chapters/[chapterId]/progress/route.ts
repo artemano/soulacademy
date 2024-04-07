@@ -1,5 +1,6 @@
-import { auth } from "@clerk/nextjs";
+//import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
+import { auth } from "@/actions/auth";
 
 import { db } from "@/lib/db";
 
@@ -8,7 +9,7 @@ export async function PUT(
     { params }: { params: { courseId: string; chapterId: string } }
 ) {
     try {
-        const { userId } = auth();
+        const { userId } = await auth();
         const { isCompleted } = await req.json();
 
         if (!userId) {

@@ -15,6 +15,10 @@ export type GetCourses = {
   title?: string;
   categoryId?: string;
 };
+export type GetCoursesPublic = {
+  title?: string,
+  categoryId?: string
+}
 
 export class CourseService {
   constructor() { }
@@ -125,7 +129,48 @@ export class CourseService {
 
       return coursesWithProgress;
     } catch (error) {
+      // retuns empty array if not found any resultas
       console.log("[GET_COURSES]", error);
+      return [];
+    }
+  }
+
+  public async publicSearch(title?: string, categoryId?: string) {
+    try {
+      const courses = await db.course.findMany({
+        where: {
+          isPublished: true,
+          title: {
+            contains: title,
+          },
+          categoryId,
+        },
+        include: {
+          category: true,
+          chapters: {
+            where: {
+              isPublished: true,
+            },
+            select: {
+              id: true,
+            }
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        }
+      });
+      const courserWithCategory: CourseWithProgressWithCategory[] = courses.map(course => {
+        const progressPercentage = null;
+        return {
+          ...course,
+          progress: progressPercentage,
+        };
+      })
+      return courserWithCategory;
+    } catch (error) {
+      // retuns empty array if not found any resultas
+      console.log("[GET_COURSES_PUBLIC]", error);
       return [];
     }
   }
@@ -175,6 +220,19 @@ export class CourseService {
         data: {
           userId,
           title: data.title,
+          detail: {
+            create: {
+              target: "",
+              goal: "",
+              teachings: "",
+              bonus: "",
+              detail: "",
+              warranty: "",
+              metaTitle: "",
+              metaDescription: "",
+              metaShareImage: "",
+            }
+          }
         },
       });
       if (!course) {
@@ -513,6 +571,7 @@ export class ChapterService {
       }
       return chapter;
     } catch (error) {
+      console.log(error)
       throw new AppException(ErrorType.GENERAL_ERROR, "Error de Servidor");
     }
   }

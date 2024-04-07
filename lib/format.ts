@@ -1,6 +1,9 @@
 export const formatPrice = (price: number) => {
-  return new Intl.NumberFormat("es-CO", {
+  const value = new Intl.NumberFormat("es-CO", {
     style: "currency",
     currency: "COP",
-  }).format(price);
+    minimumFractionDigits: 2,
+    currencyDisplay: "code",
+  }).format(price).replace("COP", "$") + " COP";
+  return value;
 };

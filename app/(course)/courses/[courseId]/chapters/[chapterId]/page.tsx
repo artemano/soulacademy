@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs";
+//import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { File } from "lucide-react";
 
@@ -10,13 +10,14 @@ import { VideoPlayer } from "./_components/video-player";
 import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { CourseProgressButton } from "./_components/course-progress-button";
 import { getChapter } from "@/actions/get-chapter";
+import { auth } from "@/actions/auth";
 
 const ChapterIdPage = async ({
     params
 }: {
     params: { courseId: string; chapterId: string }
 }) => {
-    const { userId } = auth();
+    const { userId } = await auth();
 
     if (!userId) {
         return redirect("/");
@@ -90,29 +91,37 @@ const ChapterIdPage = async ({
                         )}
                     </div>
                     <Separator />
-                    <div>
-                        <Preview value={chapter.description!} />
-                    </div>
-                    {!!attachments.length && (
+                    {!isLocked && (
                         <>
-                            <Separator />
-                            <div className="p-4">
-                                {attachments.map((attachment) => (
-                                    <a
-                                        href={attachment.url}
-                                        target="_blank"
-                                        key={attachment.id}
-                                        className="flex items-center p-3 w-full bg-purple-200 border text-purple-700 rounded-md hover:underline"
-                                    >
-                                        <File />
-                                        <p className="line-clamp-1">
-                                            {attachment.name}
-                                        </p>
-                                    </a>
-                                ))}
+                            <div>
+                                <Preview value={chapter.description!} />
+                            </div>
+                            <div>
+                                <h2 className="text-2xl font-semibold mt-3 mb-2 p-4">
+                                    Anexos
+                                </h2>
+                                <Separator />
+                                {!!attachments.length && (
+                                    <div className="p-4">
+                                        {attachments.map((attachment) => (
+                                            <a
+                                                href={attachment.url}
+                                                target="_blank"
+                                                key={attachment.id}
+                                                className="flex items-center p-3 w-full bg-purple-200 border text-purple-700 rounded-md hover:underline"
+                                            >
+                                                <File />
+                                                <p className="line-clamp-1">
+                                                    {attachment.name}
+                                                </p>
+                                            </a>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </>
-                    )}
+                    )
+                    }
                 </div>
             </div>
         </div>

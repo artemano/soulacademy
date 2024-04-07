@@ -1,11 +1,13 @@
 import { ServiceFactory } from "@/lib/service.factory";
 import { ChapterService, CourseService } from "@/services/courses";
-import { auth } from "@clerk/nextjs/server";
+//import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/actions/auth";
+
 import { NextResponse } from "next/server";
 
 export async function PUT(req: Request, { params }: { params: { courseId: string } }) {
     try {
-        const { userId } = auth();
+        const { userId } = await auth();
 
         if (!userId) {
             return new NextResponse("No autorizado", { status: 401 });

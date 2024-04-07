@@ -27,12 +27,40 @@ model Course {
   attachments Attachment[]
   chapters Chapter[]
   purchases Purchase[]
-
+  startDate DateTime? @db.DateTime()
+  endDate DateTime? @db.DateTime()
+  discountPrice Float?
+  discuountDate DateTime?  @db.DateTime()
+  modality CourseMode @default(RECORDED)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
+  detail CourseDetail?
+  
   @@index([categoryId])
   @@fulltext([title])
+}
+
+model CourseDetail {
+  id String @id @default(uuid())
+  target String? @db.Text
+  goal String? @db.Text
+  teachings String? @db.Text
+  bonus String? @db.Text
+  warranty String? @db.Text
+  metaTitle String? @db.Text
+  metaDescription String? @db.Text
+  metaShareImage String? @db.Text
+  course Course @relation(fields: [courseId], references: [id])
+  courseId String @unique
+}
+
+enum CourseMode {
+  RECORDED
+  ONLINE
+  IN_PERSON
+  WORKSHOP
+  CONFERENCE
+  MASTERCLASS
 }
 
 model Attachment {
@@ -56,6 +84,7 @@ model Chapter {
   id String @id @default(uuid())
   title String
   description String? @db.Text
+  summary String? @db.Text
   videoUrl String? @db.Text
   position Int
   isPublished Boolean @default(false)

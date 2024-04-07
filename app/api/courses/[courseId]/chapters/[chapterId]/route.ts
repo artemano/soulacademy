@@ -1,13 +1,15 @@
 import { ServiceFactory } from "@/lib/service.factory";
 import { ChapterService, CourseService, MuxService } from "@/services/courses";
-import { auth } from "@clerk/nextjs";
+//import { auth } from "@clerk/nextjs";
+import { auth } from "@/actions/auth";
+
 import { NextResponse } from "next/server";
 import Mux from "@mux/mux-node";
 
 const mux = new Mux();
 export async function DELETE(req: Request, { params }: { params: { courseId: string, chapterId: string } }) {
     try {
-        const { userId } = auth();
+        const { userId } = await auth();
         if (!userId) {
             return new NextResponse("No autorizado", { status: 401 });
         }
@@ -46,7 +48,7 @@ export async function DELETE(req: Request, { params }: { params: { courseId: str
 }
 export async function PATCH(req: Request, { params }: { params: { courseId: string, chapterId: string } }) {
     try {
-        const { userId } = auth();
+        const { userId } = await auth();
         if (!userId) {
             return new NextResponse("No autorizado", { status: 401 });
         }
@@ -58,9 +60,10 @@ export async function PATCH(req: Request, { params }: { params: { courseId: stri
         if (!ownCourse) {
             return new NextResponse("No autorizado", { status: 401 });
         }
-
+        console.log(values);
         const chapterService = ServiceFactory.getInstance("Chapters") as ChapterService;
         const chapter = await chapterService.patch(params.chapterId, params.courseId, values);
+        console.log(chapter);
         if (!chapter) {
             throw Error("Error al actualizar el capítulo");
         }

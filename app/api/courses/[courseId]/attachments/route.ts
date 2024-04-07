@@ -1,6 +1,7 @@
+import { auth } from "@/actions/auth";
 import { ServiceFactory } from "@/lib/service.factory";
 import { AttachmentService, CourseService } from "@/services/courses";
-import { auth } from "@clerk/nextjs";
+//import { auth } from "@clerk/nextjs";
 
 import { NextResponse } from "next/server";
 
@@ -9,7 +10,7 @@ export async function POST(
   { params }: { params: { courseId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     const { url } = await req.json();
 
     if (!userId) {

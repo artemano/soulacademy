@@ -1,7 +1,3 @@
-import { Category, Course } from "@prisma/client";
-
-import { getProgress } from "@/actions/get-progress";
-import { db } from "@/lib/db";
 import { ServiceFactory } from "@/lib/service.factory";
 import { CourseService, CourseWithProgressWithCategory, GetCourses } from "@/services/courses";
 

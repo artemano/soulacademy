@@ -1,11 +1,12 @@
+import { auth } from "@/actions/auth";
 import { ServiceFactory } from "@/lib/service.factory";
 import { CourseService } from "@/services/courses";
-import { auth } from "@clerk/nextjs";
+//import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     const title = await req.json();
 
     if (!userId) {
@@ -23,7 +24,7 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });

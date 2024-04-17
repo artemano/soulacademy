@@ -1,17 +1,18 @@
-import { auth } from "@/actions/auth";
+import { auth } from "@/auth";
 import { ServiceFactory } from "@/lib/service.factory";
 import { AttachmentService, CourseService } from "@/services/courses";
 //import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import { UTApi } from "uploadthing/server";
-export const utapi = new UTApi();
+const utapi = new UTApi();
 
 export async function DELETE(
   req: Request,
   { params }: { params: { attachmentId: string; courseId: string } }
 ) {
   try {
-    const { userId } = await auth();
+    const session = await auth();
+    const userId = session?.user.username;
     // Verifica si el usuario está autenticado
     if (!userId) {
       return new NextResponse("No autorizado", { status: 401 });

@@ -28,5 +28,5 @@ const CourseIdPage = async ({
 
     return redirect(`/courses/${course.id}/chapters/${course.chapters[0].id}`);
 }
-
+export const dynamic = 'force-dynamic';
 export default CourseIdPage;

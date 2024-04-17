@@ -1,24 +1,20 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { useTransition } from "react";
 import { useEffect, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { SignInOptions, signIn } from "next-auth/react";
-import Link from "next/dist/client/link";
-import toast from "react-hot-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { cn } from "@/lib/utils";
 import { parseUrl } from "@/app/lib/url-utils";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/AppIcons";
-
-const formSchema = z.object({
-  email: z.string().email({
-    message: "mail inválido",
-  }),
-  password: z.string().min(7).max(50),
-});
+import { LoginSchema } from "@/schemas";
+import CardWrarpper from "@/components/auth/card-wrapper";
+import FormError from "@/components/form-error";
+import FormSuccess from "@/components/form-success";
+import { login } from "@/actions/login";
 
 interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
   callbackUrl?: string | undefined;
@@ -30,8 +26,10 @@ export const LoginForm = ({
   callbackUrl,
   ...props
 }: LoginFormProps) => {
-  const [error, setError] = useState(props.error ?? null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+
+  const [isPending, startTransition] = useTransition();
   const [redirect, setRedirect] = useState("");
 
   useEffect(() => {
@@ -39,8 +37,8 @@ export const LoginForm = ({
     setRedirect(callbackUrl ?? "/");
   }, []);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -48,7 +46,7 @@ export const LoginForm = ({
     mode: "onChange",
   });
 
-  const loginUser = async (email: string, password: string) => {
+  /*const loginUser = async (email: string, password: string) => {
     setIsLoading(true);
     const options: SignInOptions = {
       email,
@@ -67,110 +65,101 @@ export const LoginForm = ({
       setError(result.error);
     }
     setIsLoading(false);
-  };
+  };*/
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await loginUser(values.email, values.password);
-  };
-  const getPathFromUrl = (url: string | undefined) => {
-    if (url) {
-      const parsedUrl = parseUrl(decodeURIComponent(url));
-      if (parsedUrl) {
-        const pathName = parsedUrl.pathname;
-        const returnValue = pathName.startsWith("/")
-          ? pathName.substring(1, pathName.length)
-          : pathName;
-        return returnValue;
-      }
+  const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
+    setError("");
+    setSuccess("");
+    const validateFields = LoginSchema.safeParse(values);
+    console.log(validateFields, "PASSED");
+    if (!validateFields.success) {
+      return { error: validateFields.error.message }
     }
-    return "/";
-  };
+    startTransition(() => {
+      login(values).then((data) => {
+        setError(data.error);
+        setSuccess(data.success);
+        if (data.success) {
+          setTimeout(() => {
+            location.assign(redirect ? redirect : "/");
+          }, 500);
+        }
+      }).catch(error => { setError(error) });
+    })
+  }
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
+    <CardWrarpper
+      headerLabel="Bienvenido de nuevo"
+      backButtonLabel="No tienes aún tu cuenta?"
+      backButtonHref="/register"
+      showSocial
+    >
       <Form {...form}>
         <form
           method="POST"
           onSubmit={form.handleSubmit(onSubmit)}
-          className=" border-1 shadow-2xl p-10 rounded-xl"
+          className="space-y-6"
         >
-          <h1 className="text-2xl font-bold text-purple-700 mb-2">
-            Soul Academy
-          </h1>
-          <hr />
-          <h3 className="text-md font-semibold mb-7 mt-3">
-            Bienvenido, ingresa tus datos.
-          </h3>
-          <div className="grid gap-2 bg-slate-100 p-4 rounded-xl">
-            <div className="grid gap-3">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Usuario</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="p.e: john@doe.com"
-                        {...field}
-                        autoComplete="email"
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      <span className="text-[10px]">
-                        Ingresa el correo electrónico de la cuenta
-                      </span>
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Contraseña</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="**********"
-                        type="password"
-                        autoComplete="current-password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      <span className="text-[10px]">Ingresa tu contraseña</span>
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="mt-4 w-full flex items-center justify-center">
-              <Button variant="default" disabled={isLoading} type="submit">
-                {isLoading && (
-                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                Ingresar
-              </Button>
-            </div>
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Usuario</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="p.e: pedro@example.com"
+                      disabled={isPending}
+                      {...field}
+                      autoComplete="email"
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    <span className="text-[10px]">
+                      Ingresa el correo electrónico de la cuenta
+                    </span>
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Contraseña</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="**********"
+                      type="password"
+                      disabled={isPending}
+                      autoComplete="current-password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    <span className="text-[10px]">Ingresa tu contraseña</span>
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
-          <p className="text-center text-sm text-gray-600 mt-4">
-            Aún no tengo cuenta, quiero{" "}
-            <Link className="text-blue-500 hover:underline" href="/register">
-              Registrame
-            </Link>
-          </p>
-          <p className="text-center text-sm text-gray-600 mt-4">
-            Olvidé mi password, quiero{" "}
-            <Link className="text-blue-500 hover:underline" href="/recover">
-              recuperar
-            </Link>{" "}
-            mi cuenta
-          </p>
+          <FormError message={error} />
+          <FormSuccess message={success} />
+          <div className="w-full">
+            <Button variant="default" disabled={isPending} type="submit" className="w-full">
+              {isPending && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Ingresar
+            </Button>
+          </div>
         </form>
       </Form>
-    </div>
+    </CardWrarpper>
   );
 };

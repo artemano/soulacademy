@@ -23,7 +23,6 @@ import { formatPrice } from "@/lib/format";
 
 const formSchema = z.object({
   price: z.coerce.number(),
-  discountPrice: z.coerce.number().optional(),
 });
 
 interface PriceFormProps {
@@ -36,7 +35,6 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       price: initialData?.price || undefined,
-      discountPrice: initialData?.discountPrice || undefined,
     },
   });
   // Handle onSubmit function
@@ -80,14 +78,6 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
           >
             {initialData.price ? formatPrice(initialData.price) : "Sin Precio"}
           </p>
-          <p
-            className={cn(
-              "text-sm mt-2",
-              !initialData.discountPrice && "text-slate-500 italic"
-            )}
-          >
-            {initialData.discountPrice ? formatPrice(initialData.discountPrice) : "Sin Oferta"}
-          </p>
         </>
       ) : (
         <Form {...form}>
@@ -106,24 +96,6 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
                       step="5000"
                       type="number"
                       placeholder="Ponle precio a tu curso"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="discountPrice"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      disabled={isSubmitting}
-                      step="5000"
-                      type="number"
-                      placeholder="Ponle un precio de oferta"
                       {...field}
                     />
                   </FormControl>

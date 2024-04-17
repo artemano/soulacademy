@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { SearchInput } from "@/components/search-input";
 import { getCourses } from "@/actions/get-courses";
 import { CoursesList } from "@/components/courses-list";
-import { auth } from "@/actions/auth";
 import { getCoursesPublic } from "@/actions/get-courses-public";
+import { auth } from "@/auth";
 
 interface SearchPageProps {
   searchParams: {
@@ -15,10 +15,11 @@ interface SearchPageProps {
     categoryId: string;
   }
 };
-const SearchPage = async ({
+export default async function SearchPage({
   searchParams
-}: SearchPageProps) => {
-  const { userId } = await auth();
+}: SearchPageProps) {
+  const session = await auth();
+  const userId = session?.user.username;
   const { title, categoryId } = searchParams;
   const categoryService = ServiceFactory.getInstance("Category") as CategoryService;
   const categories = await categoryService.findMany();
@@ -27,22 +28,17 @@ const SearchPage = async ({
     userId,
     ...searchParams,
   }) : await getCoursesPublic({ title, categoryId });
-  console.log(courses);
   return (
     <div className="w-full flex flex-col">
-      <div className="md:hidden mb-2 flex-1 px-6 pt-6 ">
+      <div className="md:hidden mb-2 flex-1 pr-4  pt-4 ">
         <SearchInput />
       </div>
       <hr />
-      <div className="w-full p-6 flex flex-col">
+      <div className="w-full p-4 flex flex-col">
         <Categories items={categories || []} />
         <CoursesList items={courses} />
       </div>
     </div>
   );
 }
-
-export default SearchPage;
-
-
-
+export const dynamic = 'force-dynamic';

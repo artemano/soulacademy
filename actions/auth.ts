@@ -1,10 +1,8 @@
-import authOptions from "@/app/api/auth/[...nextauth]/options";
-import { Session, getServerSession } from "next-auth";
-
+import { auth as Auth } from "@/auth";
 
 export const auth = async () => {
     try {
-        const session = await getServerSession(authOptions) as Session;
+        const session = await Auth();
         if (session?.user) {
             return {
                 userId: session.user.username,

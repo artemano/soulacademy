@@ -1,18 +1,41 @@
-//import { authMiddleware } from "@clerk/nextjs";
+import NextAuth from "next-auth";
+import authConfig from "./auth.config";
+import {
+  DEFAULT_LOGIN_REDIRECT,
+  apiAuthPrefix,
+  publicRoutes,
+  authRoutes
+} from "./routes";
 
-import { NextRequest } from "next/server";
-import { getQueryParamsFromURL, toQueryString } from "./app/lib/url-utils";
+const { auth } = NextAuth(authConfig);
 
-// This example protects all routes including api/trpc routes
-// Please edit this to allow other routes to be public as needed.
-// See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
-// export default authMiddleware({
-//   publicRoutes: ["/api/webhook", "/api/uploadthing",],
-// });
-export { default } from 'next-auth/middleware';
+export default auth((req) => {
+  const { nextUrl } = req;
+  const isLoggedIn = !!req.auth;
+  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+
+  if (isApiAuthRoute) {
+    return;
+  }
+  if (isAuthRoute) {
+    if (isLoggedIn) return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    return;
+  }
+  if (!isLoggedIn && !isPublicRoute) {
+    return Response.redirect(new URL("/login", nextUrl));
+  }
+  return;
+});
 
 export const config = {
-  matcher: ["/dashboard", "/teacher",],
-
-  //  matcher: ["/((api|_next/static|_next/image|images|favicon.ico|login|register|recover|reset-password|search).*)",],
+  // Matcher ignoring `/_next/` and `/api/`
+  matcher: [
+    // Exclude files with a "." followed by an extension, which are typically static files.
+    // Exclude files in the _next directory, which are Next.js internals.
+    "/((?!.+\\.[\\w]+$|_next).*)",
+    // Re-include any files in the api or trpc folders that might have an extension
+    "/(api|trpc)(.*)"
+  ]
 };

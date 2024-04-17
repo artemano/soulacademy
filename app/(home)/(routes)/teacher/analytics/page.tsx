@@ -5,10 +5,11 @@ import { getAnalytics } from "@/actions/get-analytics";
 
 import { DataCard } from "./_components/data-card";
 import { Chart } from "./_components/charts";
-import { auth } from "@/actions/auth";
+import { auth } from "@/auth";
 
-const AnalyticsPage = async () => {
-  const { userId } = await auth();
+export default async function AnalyticsPage() {
+  const session = await auth();
+  const userId = session?.user.username;
 
   if (!userId) {
     return redirect("/");
@@ -39,5 +40,4 @@ const AnalyticsPage = async () => {
     </div>
   );
 }
-
-export default AnalyticsPage;
+export const dynamic = 'force-dynamic';

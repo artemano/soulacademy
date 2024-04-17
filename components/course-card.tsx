@@ -28,7 +28,7 @@ export const CourseCard = ({
 }: CourseCardProps) => {
     return (
         <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">
-            <div className="relative max-w-sm min-w-[384px] sm:min-w-[260px] md:min-w-[210px] lg:min-w-[210px] xl:min-w-[230px] aspect-square rounded-md overflow-hidden">
+            <div className="relative max-w-[350px] min-w-[300px] sm:min-w-[260px] md:min-w-[210px] lg:min-w-[210px] xl:min-w-[230px] aspect-square rounded-md overflow-hidden">
                 <Image
                     fill
                     className="object-cover"

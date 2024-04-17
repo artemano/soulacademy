@@ -8,8 +8,9 @@ interface SidebarItemProps {
   label: string;
   icon: LucideIcon;
   href: string;
+  className?: string;
 }
-export const SidebarItem = ({ label, icon: Icon, href }: SidebarItemProps) => {
+export const SidebarItem = ({ label, icon: Icon, href, className }: SidebarItemProps) => {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -25,15 +26,15 @@ export const SidebarItem = ({ label, icon: Icon, href }: SidebarItemProps) => {
       onClick={onClick}
       type="button"
       className={cn(
-        "flex items-center gap-x-2 text-slate-500 text-sm font-[500] pl-6 transition-all hover:text-slate-600 hover:bg-slate-300/20",
+        "flex w-full items-center gap-x-2 text-slate-500 text-sm font-[500] pl-6 transition-all hover:text-slate-600 hover:bg-slate-300/20 group",
         isActive &&
-        "text-purple-700 bg-purple-200/20 hover:bg-purple-200/20 hover:text-purple-700"
+        "text-purple-700 bg-purple-200/20 hover:bg-purple-200/20 hover:text-purple-700", className
       )}
     >
       <div className="flex items-center gap-x-2 py-4">
         <Icon
           size={22}
-          className={cn("text-slate-500", isActive && "text-purple-700")}
+          className={cn("text-slate-500", isActive && "text-purple-700 group-hover:bg-transparent", className ? className + "bg-transparent group-hover:bg-transparent group-hover:text-slate-500" : "")}
         />
         {label}
       </div>

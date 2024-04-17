@@ -1,12 +1,12 @@
-import { auth } from "@/actions/auth";
+import { auth } from "@/auth";
 import { ServiceFactory } from "@/lib/service.factory";
 import { CourseService } from "@/services/courses";
-//import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { userId } = await auth();
+    const session = await auth();
+    const userId = session?.user.username;
     const title = await req.json();
 
     if (!userId) {
@@ -24,8 +24,8 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
   try {
-    const { userId } = await auth();
-
+    const session = await auth();
+    const userId = session?.user.username;
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }

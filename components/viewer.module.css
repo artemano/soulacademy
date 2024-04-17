@@ -1,0 +1,46 @@
+.ql-editor .ql-font-barlow {
+    font-family: "Barlow", sans-serif;
+}
+
+.ql-editor .ql-font-roboto {
+    font-family: "Roboto", sans-serif;
+}
+
+.ql-editor .ql-font-ubuntu {
+    font-family: "Ubuntu", sans-serif;
+}
+
+.ql-editor .ql-font-raleway {
+    font-family: "Raleway", sans-serif;
+}
+
+
+.ql-bubble .ql-picker.ql-header .ql-picker-label[data-label]:not([data-label=''])::before,
+.ql-bubble .ql-picker.ql-font .ql-picker-label[data-label]:not([data-label=''])::before,
+.ql-bubble .ql-picker.ql-size .ql-picker-label[data-label]:not([data-label=''])::before,
+.ql-bubble .ql-picker.ql-header .ql-picker-item[data-label]:not([data-label=''])::before,
+.ql-bubble .ql-picker.ql-font .ql-picker-item[data-label]:not([data-label=''])::before,
+.ql-bubble .ql-picker.ql-size .ql-picker-item[data-label]:not([data-label=''])::before {
+    content: attr(data-label);
+}
+
+
+.ql-bubble .ql-picker.ql-font .ql-picker-label[data-value=barlow]::before,
+.ql-bubble .ql-picker.ql-font .ql-picker-item[data-value=barlow]::before {
+    content: 'Barlow';
+}
+
+.ql-bubble .ql-picker.ql-font .ql-picker-label[data-value=roboto]::before,
+.ql-bubble .ql-picker.ql-font .ql-picker-item[data-value=roboto]::before {
+    content: 'Roboto';
+}
+
+.ql-bubble .ql-picker.ql-font .ql-picker-label[data-value=ubuntu]::before,
+.ql-bubble .ql-picker.ql-font .ql-picker-item[data-value=ubuntu]::before {
+    content: 'Ubuntu';
+}
+
+.ql-bubble .ql-picker.ql-font .ql-picker-label[data-value=raleway]::before,
+.ql-bubble .ql-picker.ql-font .ql-picker-item[data-value=raleway]::before {
+    content: 'Raleway';
+}

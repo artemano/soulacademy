@@ -42,7 +42,7 @@ export const Categories = ({
     }, []);
 
     return (
-        <div className="flex items-center gap-x-2 overflow-x-auto pb-2">
+        <div className="flex items-center gap-x-2 overflow-x-auto pb-2 no-scrollbar">
             {items.map((item) => (
                 <CategoryItem
                     key={item.id}

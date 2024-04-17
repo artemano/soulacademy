@@ -1,9 +1,10 @@
-import { auth } from "@/actions/auth";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
 
 const TeacherLayout = async ({ children }: { children: React.ReactNode }) => {
-    const { userId } = await auth();
+    const session = await auth();
+    const userId = session?.user.username;
 
     if (!userId) {
         return redirect("/")

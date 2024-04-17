@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   ListChecks,
   File,
+  Magnet
 } from "lucide-react";
 import { redirect } from "next/navigation";
 import TitleForm from "./_components/title-form";
@@ -19,7 +20,15 @@ import AttachmentForm from "./_components/attachment-form";
 import ChaptersForm from "./_components/chapters-form";
 import { Banner } from "@/components/banner";
 import { Actions } from "./_components/actions";
-import { auth } from "@/actions/auth";
+import DiscountPriceForm from "./_components/discount-form";
+import GoalsForm from "./_components/goals-form";
+import TargetForm from "./_components/target-form";
+import TeachingsForm from "./_components/teachings-form";
+import DatesForm from "./_components/dates-form";
+import ModalityForm from "./_components/modality-form";
+import { auth } from "@/auth";
+import BonusForm from "./_components/bonus-form";
+import WarrantyForm from "./_components/warranty-form";
 
 const CourseDetailPage = async ({
   params,
@@ -27,7 +36,8 @@ const CourseDetailPage = async ({
   params: { courseId: string };
 }) => {
   try {
-    const { userId } = await auth();
+    const session = await auth();
+    const userId = session?.user.username;
 
     if (!userId) return redirect("/");
 
@@ -37,7 +47,6 @@ const CourseDetailPage = async ({
 
     const course = await coursesService.findById(params.courseId, userId);
 
-    console.log("COURSE DETAIL::::");
     console.log(params.courseId, course?.chapters);
 
     const categoryService = ServiceFactory.getInstance(
@@ -53,7 +62,11 @@ const CourseDetailPage = async ({
       course.description,
       course.imageUrl,
       course.price,
+      course.discountPrice,
       course.categoryId,
+      course.detail?.goal,
+      course.detail?.target,
+      course.detail?.teachings,
       course.chapters.some((chapter) => chapter.isPublished),
     ];
     const totalFields = requiredFields.length;
@@ -63,7 +76,14 @@ const CourseDetailPage = async ({
     return (
       <> {
         !course.isPublished && (
-          <Banner label="Este curso aún no ha sido publicado, no aparecerá visible en el mercado" />
+          <div className="w-full">
+            <Banner label="Este curso aún no ha sido publicado, no aparecerá visible en el mercado" />
+            {
+              requiredFields.map((field, key) => (
+                <p key={key}>{field}</p>
+              ))
+            }
+          </div>
         )
       }
         <div className="p-6">
@@ -80,11 +100,12 @@ const CourseDetailPage = async ({
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={LayoutDashboard} />
-                <h2 className="text-xl">Personaliza tu curso</h2>
+                <h2 className="text-2xl font-semibold text-slate-600">Personaliza tu curso</h2>
               </div>
               <TitleForm initialData={course} courseId={course.id} />
               <DescriptionForm initialData={course} courseId={course.id} />
               <ImageForm initialData={course} courseId={course.id} />
+              <ModalityForm initialData={course} courseId={course.id} />
               <CategoryForm
                 initialData={course}
                 courseId={course.id}
@@ -95,32 +116,52 @@ const CourseDetailPage = async ({
                   };
                 })}
               />
-            </div>
-            <div className="space-y-6">
-              <div>
+              <div className="mt-8">
                 <div className="flex items-center gap-x-2">
                   <IconBadge icon={ListChecks} />
-                  <h2 className="text-xl">Lecciones del Curso</h2>
+                  <h2 className="text-2xl font-semibold text-slate-600">Lecciones del Curso</h2>
                 </div>
                 <ChaptersForm initialData={course} courseId={course.id} />
               </div>
               <div>
-                <div className="flex items-center gap-x-2">
-                  <IconBadge icon={CircleDollarSign} />
-                  <h2 className="text-xl">Vende tu curso</h2>
-                </div>
-                <div>
-                  <PriceForm initialData={course} courseId={course.id} />
-                </div>
-              </div>
-              <div>
-                <div className="flex items-center gap-x-2">
+                <div className="flex items-center gap-x-2 mt-7">
                   <IconBadge icon={File} />
-                  <h2 className="text-xl">Recursos y Anexos</h2>
+                  <h2 className="text-2xl font-semibold text-slate-600">Recursos y Anexos</h2>
                 </div>
                 <AttachmentForm initialData={course} courseId={course.id} />
               </div>
             </div>
+            <div>
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={Magnet} />
+                <h2 className="text-2xl font-semibold text-slate-600">Mercadea tu curso</h2>
+              </div>
+              <GoalsForm initialData={course.detail!} courseId={course.id} />
+              <TargetForm initialData={course.detail!} courseId={course.id} />
+              <TeachingsForm initialData={course.detail!} courseId={course.id} />
+
+              <div className="flex items-center gap-x-2 mt-7">
+                <IconBadge icon={CircleDollarSign} />
+                <h2 className="text-2xl font-semibold text-slate-600">Vende tu curso</h2>
+              </div>
+              <div>
+                <PriceForm initialData={course} courseId={course.id} />
+              </div>
+              <div>
+                <DiscountPriceForm initialData={course} courseId={course.id} />
+              </div>
+              <div>
+                <DatesForm initialData={course!} courseId={course.id} />
+              </div>
+
+              <div className="flex items-center gap-x-2 mt-7">
+                <IconBadge icon={CircleDollarSign} />
+                <h2 className="text-2xl font-semibold text-slate-600">Mejora tu Propuesta de Valor</h2>
+              </div>
+              <BonusForm initialData={course.detail!} courseId={course.id} />
+              <WarrantyForm initialData={course.detail!} courseId={course.id} />
+            </div>
+
           </div>
         </div>
       </>

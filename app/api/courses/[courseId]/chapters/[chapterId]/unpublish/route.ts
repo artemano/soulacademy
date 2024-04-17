@@ -1,13 +1,14 @@
+import { auth } from "@/auth";
 import { ServiceFactory } from "@/lib/service.factory";
 import { ChapterService, CourseService, MuxService } from "@/services/courses";
 //import { auth } from "@clerk/nextjs/server";
-import { auth } from "@/actions/auth";
 
 import { NextResponse } from "next/server";
 
 export async function PATCH(req: Request, { params }: { params: { courseId: string, chapterId: string } }) {
     try {
-        const { userId } = await auth();
+        const session = await auth();
+        const userId = session?.user.username;
 
         if (!userId) {
             return new NextResponse("No autorizado", { status: 401 });

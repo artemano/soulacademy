@@ -1,15 +1,16 @@
 //import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-import { auth } from "@/actions/auth";
 
 import { db } from "@/lib/db";
+import { auth } from "@/auth";
 
 export async function PUT(
     req: Request,
     { params }: { params: { courseId: string; chapterId: string } }
 ) {
     try {
-        const { userId } = await auth();
+        const session = await auth();
+        const userId = session?.user.username;
         const { isCompleted } = await req.json();
 
         if (!userId) {

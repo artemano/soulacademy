@@ -1,16 +1,15 @@
+import { RegisterFormSchema } from "@/schemas";
 import { NextRequest, NextResponse } from "next/server";
 
 const apiEndpoint = process.env.NEXT_PUBLIC_STRAPI_API_URL;
-import { RegisterFormSchema as registerSchema } from "@/app/utils/schemas";
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, lastname, email, password, accept } = registerSchema.parse(
+    const { name, lastname, email, password, accept } =
       await request.json()
-    );
+
     const username = email;
-    //console.log(username, name, lastname, email, accept);
-    //console.log(apiEndpoint);
+    console.log(username, name, lastname, email, accept);
     const endPoint = `${apiEndpoint}/api/auth/local/register`;
 
     const settings = {
@@ -35,7 +34,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (e: any) {
-    console.error("User Register", e);
+    console.log("User Register", e);
     return NextResponse.json(
       { message: "Error registrando al usuario", e },
       { status: 500 }

@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { CreateCourseDto, UpdateCourseDto } from "@/lib/dtos/courses";
+import { CreateCourseDto, UpdateCourseDetailsDto, UpdateCourseDto } from "@/lib/dtos/courses";
 import { AppException, ErrorType } from "@/lib/exception/app-exception";
 import { ServiceFactory } from "@/lib/service.factory";
 import { Prisma, Chapter, Category, Course } from '@prisma/client';
@@ -59,6 +59,7 @@ export class CourseService {
               muxData: true,
             }
           },
+          detail: true,
           attachments: {
             orderBy: {
               createdAt: "desc",
@@ -226,7 +227,6 @@ export class CourseService {
               goal: "",
               teachings: "",
               bonus: "",
-              detail: "",
               warranty: "",
               metaTitle: "",
               metaDescription: "",
@@ -290,6 +290,35 @@ export class CourseService {
             error.message
           );
         }
+        throw new AppException(ErrorType.GENERAL_ERROR, error.message);
+      }
+      throw error;
+    }
+  }
+
+  public async updateDetails(
+    courseId: string,
+    values: UpdateCourseDetailsDto
+  ) {
+    try {
+      const course = await db.courseDetail.update({
+        where: {
+          courseId: courseId,
+        },
+        data: {
+          ...values,
+        },
+      });
+      if (!course) {
+        throw new AppException(
+          ErrorType.INVALID_ARGUMENTS_ERROR,
+          "Error actualizando curso"
+        );
+      }
+      return course;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        // The .code property can be accessed in a type-safe manner
         throw new AppException(ErrorType.GENERAL_ERROR, error.message);
       }
       throw error;

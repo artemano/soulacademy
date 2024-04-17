@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 import { CourseProgress } from "@/components/course-progress";
 
 import { CourseSidebarItem } from "./course-sidebar-item";
-import { auth } from "@/actions/auth";
+import { auth } from "@/auth";
 
 interface CourseSidebarProps {
     course: Course & {
@@ -21,7 +21,8 @@ export const CourseSidebar = async ({
     course,
     progressCount,
 }: CourseSidebarProps) => {
-    const { userId } = await auth();
+    const session = await auth();
+    const userId = session?.user.username;
 
     if (!userId) {
         return redirect("/");

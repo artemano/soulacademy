@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Chapter } from "@prisma/client";
 import { Editor } from "@/components/editor";
-import { Preview } from "@/components/preview";
+import { TipTap } from "@/components/tip-tap";
 
 const formSchema = z.object({
   description: z.string().min(1, {
@@ -80,7 +80,7 @@ const ChapterDescriptionForm = ({ initialData, courseId, chapterId }: ChapterDes
         >
           {!initialData.description && "Sin descripción"}
           {initialData.description && (
-            <Preview value={initialData.description} />
+            <TipTap value={initialData.description} readonly />
           )}
         </div>
       ) : (
@@ -95,7 +95,7 @@ const ChapterDescriptionForm = ({ initialData, courseId, chapterId }: ChapterDes
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Editor
+                    <TipTap
                       {...field}
                     />
                   </FormControl>

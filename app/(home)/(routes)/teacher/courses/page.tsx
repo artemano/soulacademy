@@ -1,17 +1,15 @@
 //import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
-import { db } from "@/lib/db";
-
 import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/columns";
 import { ServiceFactory } from "@/lib/service.factory";
 import { CourseService } from "@/services/courses";
-import { auth } from "@/actions/auth";
+import { auth } from "@/auth";
 
-const CoursesPage = async () => {
-  const { userId } = await auth();
-  console.log(userId);
+export default async function CoursesPage() {
+  const session = await auth();
+  const userId = session?.user.username;
   if (!userId) {
     return redirect("/");
   }
@@ -24,5 +22,4 @@ const CoursesPage = async () => {
     </div>
   );
 }
-
-export default CoursesPage;
+export const dynamic = 'force-dynamic';

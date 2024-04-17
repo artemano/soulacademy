@@ -23,6 +23,7 @@ import toast from "react-hot-toast";
 const formSchema = z.object({
   title: z.string().min(1, { message: "El título es obligatorio" }),
 });
+export const dynamic = 'force-dynamic';
 
 export default function CreateCourse() {
   const form = useForm<z.infer<typeof formSchema>>({

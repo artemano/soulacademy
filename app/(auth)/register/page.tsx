@@ -32,7 +32,6 @@ export default function RegisterPage({ searchParams }: LoginProps) {
       <RegisterForm
         error={searchParams?.error}
         callbackUrl={callbackString}
-        className="flex flex-col-1 items-center justify-center"
       />
     </div>
   );

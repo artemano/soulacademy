@@ -1,3 +1,5 @@
+import { CourseMode } from "@prisma/client";
+
 export interface CreateCourseDto {
   title: string;
   target?: string;
@@ -22,22 +24,17 @@ export interface UpdateCourseDto {
   categoryId?: string;
   discountPrice?: number;
   discountDate?: Date;
-  modality: CouseMode;
+  modality?: CourseMode;
+}
+
+export interface UpdateCourseDetailsDto {
+  id: string;
   target?: string;
   goal?: string;
   teachings?: string;
-  detail?: string;
   bonus?: string;
   warranty?: string;
   metaTitle?: string;
   metaDescription?: string;
   metaShareImage?: string;
-}
-export enum CouseMode {
-  RECORDED,
-  ONLINE,
-  IN_PERSON,
-  WORKSHOP,
-  CONFERENCE,
-  MASTERCLASS,
 }

@@ -3,11 +3,10 @@ import { Sidebar } from "./_components/sidebar";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex">
-      <div className="h-[80px] fixed inset-y-0 w-full">
+    <div className="flex w-full no-scrollbar">
+      <div className="h-[80px] fixed inset-y-0 w-full z-[1]">
         <Navbar />
       </div>
-
       <main className="flex flex-row w-full">
         <div className="hidden top-[80px] md:flex w-44 flex-col fixed inset-y-0 shadow-lg">
           <Sidebar />

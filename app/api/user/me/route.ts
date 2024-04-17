@@ -1,12 +1,11 @@
+import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from 'next-auth';
-import authOptions from "../../auth/[...nextauth]/options";
 
 const apiEndpoint = process.env.NEXT_PUBLIC_STRAPI_API_URL;
-
+console.log(apiEndpoint);
 export async function GET(request: NextRequest) {
   try {
-    const user = await getServerSession(authOptions);
+    const user = await auth();
     if (!user) {
       return NextResponse.json(
         { success: false, message: "No autorizado" },

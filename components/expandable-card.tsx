@@ -1,7 +1,7 @@
 
 import React from "react";
 import { LiaChevronDownSolid } from "react-icons/lia";
-import { Preview } from "./preview";
+import { TipTap } from "./tip-tap";
 
 interface ExpandableCardProps {
     title: string;
@@ -23,9 +23,7 @@ const ExpandableCard = ({ title, content }: ExpandableCardProps) => {
                     <LiaChevronDownSolid className="h-5 w-5 transition-all duration-1000 group-focus:-rotate-180" />
                 </div>
                 <div className="invisible h-[auto] max-h-0 items-center opacity-0 transition-all group-focus:visible group-focus:max-h-screen group-focus:opacity-100 group-focus:duration-1000 bg-white rounded-xl focus-visible:p-4 focus-visible:bg-indigo-950">
-                    <Preview
-                        value={content}
-                    />
+                    <TipTap value={content} readonly />
                 </div>
             </div>
         </div>

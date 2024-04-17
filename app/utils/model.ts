@@ -1,3 +1,5 @@
+import { CourseMode } from "@prisma/client";
+
 type StrapiResponse<T> = {
   data: T;
   message: string;
@@ -262,3 +264,24 @@ export interface NewUser {
   email: string;
   password: string;
 }
+
+
+export const CourseOptions = [
+  {
+    label: "Grabado", value: CourseMode.RECORDED
+  },
+  {
+    label: "Conferencia", value: CourseMode.CONFERENCE
+  },
+  {
+    label: "Presencial", value: CourseMode.IN_PERSON
+  },
+  {
+    label: "Masterclass", value: CourseMode.MASTERCLASS
+  },
+  {
+    label: "En Vivo", value: CourseMode.ONLINE
+  },
+  {
+    label: "Taller", value: CourseMode.WORKSHOP
+  }];

@@ -1,7 +1,5 @@
-//import { getServerSession } from "next-auth";
+import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
-//import authOptions from "../../auth/[...nextauth]/options";
-import { auth } from "@/actions/auth";
 
 const apiEndpoint = process.env.NEXT_PUBLIC_STRAPI_API_URL;
 
@@ -9,7 +7,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     try {
         const body = await req.json();
         //const user = await getServerSession(authOptions);
-        const { sessionToken } = await auth();
+        const session = await auth();
+        const sessionToken = session?.user.token;
         //const sessionToken = user?.user.token;
         const { currentPassword, password, passwordConfirmation } = body;
         //console.log(currentPassword, password, passwordConfirmation)

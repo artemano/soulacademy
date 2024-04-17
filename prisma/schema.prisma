@@ -18,6 +18,7 @@ model Course {
   title   String  @db.Text
   description String? @db.Text
   imageUrl String? @db.Text
+  introVideoUrl String? @db.Text
   price Float?
   isPublished Boolean @default(false)
 
@@ -56,11 +57,11 @@ model CourseDetail {
 
 enum CourseMode {
   RECORDED
-  ONLINE
+  ONLINE 
   IN_PERSON
   WORKSHOP
   CONFERENCE
-  MASTERCLASS
+  MASTERCLASS 
 }
 
 model Attachment {
@@ -102,7 +103,6 @@ model MuxData {
   id String @id @default(uuid())
   assetId String
   playbackId String?
-
   chapterId String @unique
   chapter Chapter @relation(fields:[chapterId], references :[id], onDelete: Cascade)
 }

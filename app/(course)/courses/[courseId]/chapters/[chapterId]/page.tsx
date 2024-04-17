@@ -4,13 +4,12 @@ import { File } from "lucide-react";
 
 import { Banner } from "@/components/banner";
 import { Separator } from "@/components/ui/separator";
-import { Preview } from "@/components/preview";
-
 import { VideoPlayer } from "./_components/video-player";
 import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { CourseProgressButton } from "./_components/course-progress-button";
 import { getChapter } from "@/actions/get-chapter";
 import { auth } from "@/actions/auth";
+import { TipTap } from "@/components/tip-tap";
 
 const ChapterIdPage = async ({
     params
@@ -94,7 +93,7 @@ const ChapterIdPage = async ({
                     {!isLocked && (
                         <>
                             <div>
-                                <Preview value={chapter.description!} />
+                                <TipTap value={chapter.description!} readonly />
                             </div>
                             <div>
                                 <h2 className="text-2xl font-semibold mt-3 mb-2 p-4">
@@ -127,5 +126,5 @@ const ChapterIdPage = async ({
         </div>
     );
 }
-
+export const dynamic = 'force-dynamic';
 export default ChapterIdPage;

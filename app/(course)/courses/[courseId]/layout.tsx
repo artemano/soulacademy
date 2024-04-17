@@ -5,8 +5,7 @@ import { getProgress } from "@/actions/get-progress";
 
 import { CourseSidebar } from "./_components/course-sidebar";
 import { CourseNavbar } from "./_components/course-navbar";
-//import { auth } from "@clerk/nextjs";
-import { auth } from "@/actions/auth";
+import { auth } from "@/auth";
 
 const CourseLayout = async ({
     children,
@@ -15,8 +14,8 @@ const CourseLayout = async ({
     children: React.ReactNode;
     params: { courseId: string };
 }) => {
-    const { userId } = await auth();
-
+    const session = await auth();
+    const userId = session?.user.username;
     if (!userId) {
         return redirect("/login")
     }
@@ -51,7 +50,7 @@ const CourseLayout = async ({
     const progressCount = await getProgress(userId, course.id);
 
     return (
-        <div className="w-full h-full flex flex-col">
+        <div className="w-full h-full flex flex-col no-scrollbar">
             <div className="h-[80px] fixed inset-y-0 w-full z-50">
                 <CourseNavbar
                     course={course}

@@ -1,0 +1,81 @@
+/*!
+ * Quill Editor v1.3.7
+ * https://quilljs.com/
+ * Copyright (c) 2014, Jason Chen
+ * Copyright (c) 2013, salesforce.com
+ */
+@import url('https://fonts.googleapis.com/css2?family=Barlow&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+
+/*!
+ * Quill Editor v1.3.7
+ * https://quilljs.com/
+ * Copyright (c) 2014, Jason Chen
+ * Copyright (c) 2013, salesforce.com
+ */
+
+
+.ql-editor .ql-font-barlow {
+    font-family: "Barlow", sans-serif;
+}
+
+.ql-editor .ql-font-roboto {
+    font-family: "Roboto", sans-serif;
+}
+
+.ql-editor .ql-font-ubuntu {
+    font-family: "Ubuntu", sans-serif;
+}
+
+.ql-editor .ql-font-raleway {
+    font-family: "Raleway", sans-serif;
+}
+
+
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-label]:not([data-label=''])::before,
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-label]:not([data-label=''])::before,
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-label]:not([data-label=''])::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-label]:not([data-label=''])::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-label]:not([data-label=''])::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-label]:not([data-label=''])::before {
+    content: attr(data-label);
+}
+
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=barlow]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=barlow]::before {
+    content: 'Barlow';
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=barlow]::before {
+    font-family: "Barlow", sans-serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=roboto]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=roboto]::before {
+    content: 'Roboto';
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=roboto]::before {
+    font-family: "Roboto", sans-serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=ubuntu]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=ubuntu]::before {
+    content: 'Ubuntu';
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=ubuntu]::before {
+    font-family: "Ubuntu", sans-serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=raleway]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=raleway]::before {
+    content: 'Raleway';
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=ubuntu]::before {
+    font-family: "Ubuntu", sans-serif;
+}

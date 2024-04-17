@@ -1,18 +1,17 @@
 import { getDashboardCourses } from "@/actions/get-dashboard-courses";
 import { CoursesList } from "@/components/courses-list";
-//import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { InfoCard } from "./_components/info-card";
 import { CheckCircle, Clock } from "lucide-react";
-import { auth } from "@/actions/auth";
+import { auth } from "@/auth";
 
-async function Dashboard() {
-  const { userId } = await auth();
-  if (!userId) return redirect("/");
+export default async function Dashboard() {
+  const session = await auth();
+  if (!session) return redirect("/");
 
   const {
     completedCourses, coursesInProgress
-  } = await getDashboardCourses(userId);
+  } = await getDashboardCourses(session.user.username!)
 
   return (
     <div className="p-6 space-y-4">
@@ -23,5 +22,4 @@ async function Dashboard() {
       <CoursesList items={[...coursesInProgress, ...completedCourses]} />
     </div>);
 }
-
-export default Dashboard;
+export const dynamic = 'force-dynamic';

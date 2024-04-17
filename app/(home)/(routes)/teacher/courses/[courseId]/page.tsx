@@ -139,7 +139,8 @@ const CourseDetailPage = async ({
               <GoalsForm initialData={course.detail!} courseId={course.id} />
               <TargetForm initialData={course.detail!} courseId={course.id} />
               <TeachingsForm initialData={course.detail!} courseId={course.id} />
-
+              <BonusForm initialData={course.detail!} courseId={course.id} />
+              <WarrantyForm initialData={course.detail!} courseId={course.id} />
               <div className="flex items-center gap-x-2 mt-7">
                 <IconBadge icon={CircleDollarSign} />
                 <h2 className="text-2xl font-semibold text-slate-600">Vende tu curso</h2>
@@ -153,13 +154,6 @@ const CourseDetailPage = async ({
               <div>
                 <DatesForm initialData={course!} courseId={course.id} />
               </div>
-
-              <div className="flex items-center gap-x-2 mt-7">
-                <IconBadge icon={CircleDollarSign} />
-                <h2 className="text-2xl font-semibold text-slate-600">Mejora tu Propuesta de Valor</h2>
-              </div>
-              <BonusForm initialData={course.detail!} courseId={course.id} />
-              <WarrantyForm initialData={course.detail!} courseId={course.id} />
             </div>
 
           </div>

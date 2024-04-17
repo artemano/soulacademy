@@ -1,5 +1,5 @@
 export const publicRoutes = [
-    "/", "/api/user", "/api/uploadthing"
+    "/", "/api/user", "/api/uploadthing", "/course/*"
 ]
 
 

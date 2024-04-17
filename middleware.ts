@@ -16,14 +16,19 @@ export default auth((req) => {
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-  if (isApiAuthRoute) {
+  const pathname = nextUrl.pathname;
+
+  if (isApiAuthRoute || publicRoutes) {
+    console.log("API_ROUTE: ", pathname);
     return;
   }
   if (isAuthRoute) {
+    console.log("AUTH_ROUTE: ", pathname);
     if (isLoggedIn) return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     return;
   }
   if (!isLoggedIn && !isPublicRoute) {
+    console.log("NOT_AUTH: ", pathname);
     return Response.redirect(new URL("/login", nextUrl));
   }
   return;
